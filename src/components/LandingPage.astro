@@ -257,6 +257,19 @@ import { floatingAssets, navLinks } from '../data/floatingAssets';
 			animation-name: drift-mobile;
 			animation-duration: calc(var(--float-duration) * 1.08);
 		}
+
+		.floating-asset.asset-6 {
+			top: auto;
+			right: auto;
+			bottom: 28px;
+			left: 50%;
+			transform: translateX(-50%);
+			animation: none;
+		}
+
+		.floating-asset.asset-6 .floating-asset__inner {
+			transform: none;
+		}
 	}
 
 	@media (prefers-reduced-motion: reduce) {
