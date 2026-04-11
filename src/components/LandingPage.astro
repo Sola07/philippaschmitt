@@ -219,13 +219,13 @@ import { floatingAssets, navLinks } from '../data/floatingAssets';
 
 		.copy {
 			position: absolute;
-			top: 50%;
+			top: 42%;
 			left: 50%;
 			transform: translate(-50%, -50%);
 			width: min(320px, calc(100vw - 36px));
 			max-width: 320px;
 			align-items: center;
-			gap: 30px;
+			gap: 24px;
 			text-align: center;
 		}
 
@@ -235,7 +235,7 @@ import { floatingAssets, navLinks } from '../data/floatingAssets';
 		}
 
 		nav ul {
-			gap: 26px;
+			gap: 22px;
 		}
 
 		nav a {
@@ -259,10 +259,12 @@ import { floatingAssets, navLinks } from '../data/floatingAssets';
 		}
 
 		.floating-asset.asset-6 {
-			top: calc(50% + 170px);
+			position: fixed;
+			top: calc(42% + 168px);
 			right: auto;
 			bottom: auto;
 			left: 50%;
+			z-index: 2;
 			transform: translateX(-50%);
 			animation: none;
 		}

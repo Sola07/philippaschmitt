@@ -192,7 +192,7 @@ export const floatingAssets: FloatingAsset[] = [
 		mobileDriftScale: 0.22,
 		depth: 2,
 		desktop: { bottom: '13%', left: '26%' },
-		mobile: { bottom: '9%', left: '11%' },
+		mobile: { bottom: '11%', left: '10%' },
 		interaction: { strength: 15, radius: 160 },
 		motion: {
 			duration: '20s',
@@ -215,7 +215,7 @@ export const floatingAssets: FloatingAsset[] = [
 		mobileDriftScale: 0.24,
 		depth: 2,
 		desktop: { top: '17%', left: '38%' },
-		mobile: { top: '7%', left: '16%' },
+		mobile: { top: '10%', left: '18%' },
 		interaction: { strength: 18, radius: 220 },
 		motion: {
 			duration: '26s',
@@ -238,7 +238,7 @@ export const floatingAssets: FloatingAsset[] = [
 		mobileDriftScale: 0.22,
 		depth: 2,
 		desktop: { top: '33%', left: '57%' },
-		mobile: { top: '11%', right: '11%' },
+		mobile: { top: '12%', right: '10%' },
 		interaction: { strength: 18, radius: 190 },
 		motion: {
 			duration: '21s',
@@ -284,7 +284,7 @@ export const floatingAssets: FloatingAsset[] = [
 		mobileDriftScale: 0.18,
 		depth: 2,
 		desktop: { bottom: '10%', right: '12%' },
-		mobile: { bottom: '10%', right: '11%' },
+		mobile: { bottom: '11%', right: '11%' },
 		interaction: { strength: 16, radius: 180 },
 		motion: {
 			duration: '23s',
