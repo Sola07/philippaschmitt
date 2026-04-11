@@ -1,5 +1,8 @@
 ---
 import { floatingAssets, navLinks } from '../data/floatingAssets';
+
+const mobileAnchorAsset = floatingAssets.find((asset) => asset.className === 'asset-6');
+const floatingSceneAssets = floatingAssets.filter((asset) => asset.className !== 'asset-6');
 ---
 
 <section class="landing">
@@ -26,7 +29,7 @@ import { floatingAssets, navLinks } from '../data/floatingAssets';
 
 	<div class="floating-assets" aria-hidden="true">
 		{
-			floatingAssets.map((asset) => (
+			floatingSceneAssets.map((asset) => (
 				<div
 					class={`floating-asset ${asset.className}`}
 					style={asset.style}
@@ -45,6 +48,19 @@ import { floatingAssets, navLinks } from '../data/floatingAssets';
 			))
 		}
 	</div>
+
+	{
+		mobileAnchorAsset && (
+			<div class="mobile-anchor-asset" aria-hidden="true">
+				<img
+					src={mobileAnchorAsset.src}
+					alt=""
+					width={mobileAnchorAsset.dimensions.width}
+					height={mobileAnchorAsset.dimensions.height}
+				/>
+			</div>
+		)
+	}
 </section>
 
 <style>
@@ -109,6 +125,10 @@ import { floatingAssets, navLinks } from '../data/floatingAssets';
 		pointer-events: none;
 		z-index: 1;
 		overflow: hidden;
+	}
+
+	.mobile-anchor-asset {
+		display: none;
 	}
 
 	.floating-asset {
@@ -214,7 +234,7 @@ import { floatingAssets, navLinks } from '../data/floatingAssets';
 	@media (max-width: 900px) {
 		.landing {
 			min-height: 100dvh;
-			padding: 0;
+			padding: 0 0 320px;
 		}
 
 		.copy {
@@ -248,6 +268,7 @@ import { floatingAssets, navLinks } from '../data/floatingAssets';
 		}
 
 		.floating-asset {
+			position: fixed;
 			top: var(--mobile-top, auto);
 			right: var(--mobile-right, auto);
 			bottom: var(--mobile-bottom, auto);
@@ -258,19 +279,20 @@ import { floatingAssets, navLinks } from '../data/floatingAssets';
 			animation-duration: calc(var(--float-duration) * 1.08);
 		}
 
-		.floating-asset.asset-6 {
-			position: fixed;
+		.mobile-anchor-asset {
+			display: block;
+			position: absolute;
 			top: calc(42% + 168px);
-			right: auto;
-			bottom: auto;
 			left: 50%;
 			z-index: 2;
 			transform: translateX(-50%);
-			animation: none;
 		}
 
-		.floating-asset.asset-6 .floating-asset__inner {
-			transform: none;
+		.mobile-anchor-asset img {
+			display: block;
+			width: 208px;
+			height: 302px;
+			object-fit: contain;
 		}
 	}
 
