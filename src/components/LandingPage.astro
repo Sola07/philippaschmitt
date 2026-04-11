@@ -233,8 +233,16 @@ const floatingSceneAssets = floatingAssets.filter((asset) => asset.className !==
 
 	@media (max-width: 900px) {
 		.landing {
-			min-height: 100dvh;
+			min-height: 132dvh;
 			padding: 0 0 320px;
+		}
+
+		.floating-assets {
+			top: 0;
+			right: 0;
+			bottom: auto;
+			left: 0;
+			height: 100dvh;
 		}
 
 		.copy {
@@ -268,7 +276,7 @@ const floatingSceneAssets = floatingAssets.filter((asset) => asset.className !==
 		}
 
 		.floating-asset {
-			position: fixed;
+			position: absolute;
 			top: var(--mobile-top, auto);
 			right: var(--mobile-right, auto);
 			bottom: var(--mobile-bottom, auto);
