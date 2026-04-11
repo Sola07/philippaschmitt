@@ -43,6 +43,7 @@ type FloatingAssetInput = {
 	dimensions: Dimensions;
 	interaction: Interaction;
 	mobile: Anchor;
+	mobileDriftScale?: number;
 	mobileDimensions?: Dimensions;
 	motion: Motion;
 	src: string;
@@ -74,6 +75,9 @@ const mobileDimensionsToVars = (dimensions?: Dimensions) =>
 		? `--mobile-asset-width: ${dimensions.width}px; --mobile-asset-height: ${dimensions.height}px;`
 		: '';
 
+const mobileDriftScaleToVars = (scale?: number) =>
+	typeof scale === 'number' ? `--mobile-drift-scale: ${scale};` : '';
+
 const motionToVars = (motion: Motion) => {
 	const [step1, step2, step3, step4] = motion.steps;
 	return [
@@ -103,6 +107,7 @@ const createFloatingAsset = (input: FloatingAssetInput): FloatingAsset => ({
 	style: [
 		dimensionsToVars(input.dimensions),
 		mobileDimensionsToVars(input.mobileDimensions),
+		mobileDriftScaleToVars(input.mobileDriftScale),
 		anchorToVars('desktop', input.desktop),
 		anchorToVars('mobile', input.mobile),
 		motionToVars(input.motion),
@@ -138,6 +143,7 @@ export const floatingAssets: FloatingAsset[] = [
 		className: 'asset-1',
 		dimensions: { width: 169, height: 180 },
 		mobileDimensions: { width: 0, height: 0 },
+		mobileDriftScale: 0,
 		depth: 3,
 		desktop: { top: '41%', left: '27%' },
 		mobile: { top: '68%', left: '34%' },
@@ -160,6 +166,7 @@ export const floatingAssets: FloatingAsset[] = [
 		className: 'asset-2',
 		dimensions: { width: 136, height: 123 },
 		mobileDimensions: { width: 0, height: 0 },
+		mobileDriftScale: 0,
 		depth: 1,
 		desktop: { top: '58%', left: '10%' },
 		mobile: { top: '80%', left: '8%' },
@@ -181,10 +188,11 @@ export const floatingAssets: FloatingAsset[] = [
 		alt: 'Coeur',
 		className: 'asset-3',
 		dimensions: { width: 101, height: 92 },
-		mobileDimensions: { width: 75, height: 69 },
+		mobileDimensions: { width: 86, height: 79 },
+		mobileDriftScale: 0.22,
 		depth: 2,
 		desktop: { bottom: '13%', left: '26%' },
-		mobile: { bottom: '8%', left: '10%' },
+		mobile: { bottom: '9%', left: '11%' },
 		interaction: { strength: 15, radius: 160 },
 		motion: {
 			duration: '20s',
@@ -203,10 +211,11 @@ export const floatingAssets: FloatingAsset[] = [
 		alt: 'Perles roses',
 		className: 'asset-4',
 		dimensions: { width: 280, height: 269 },
-		mobileDimensions: { width: 140, height: 134 },
+		mobileDimensions: { width: 187, height: 177 },
+		mobileDriftScale: 0.24,
 		depth: 2,
 		desktop: { top: '17%', left: '38%' },
-		mobile: { top: '6%', left: '16%' },
+		mobile: { top: '7%', left: '16%' },
 		interaction: { strength: 18, radius: 220 },
 		motion: {
 			duration: '26s',
@@ -225,10 +234,11 @@ export const floatingAssets: FloatingAsset[] = [
 		alt: 'Coeur ornamental',
 		className: 'asset-5',
 		dimensions: { width: 160, height: 111 },
-		mobileDimensions: { width: 128, height: 88 },
+		mobileDimensions: { width: 142, height: 98 },
+		mobileDriftScale: 0.22,
 		depth: 2,
 		desktop: { top: '33%', left: '57%' },
-		mobile: { top: '11%', right: '10%' },
+		mobile: { top: '11%', right: '11%' },
 		interaction: { strength: 18, radius: 190 },
 		motion: {
 			duration: '21s',
@@ -248,9 +258,10 @@ export const floatingAssets: FloatingAsset[] = [
 		className: 'asset-6',
 		dimensions: { width: 313, height: 455 },
 		mobileDimensions: { width: 208, height: 302 },
+		mobileDriftScale: 0.16,
 		depth: 1,
 		desktop: { top: '10%', right: '11%' },
-		mobile: { bottom: '3%', left: '31%' },
+		mobile: { bottom: '4%', left: '23%' },
 		interaction: { strength: 24, radius: 260 },
 		motion: {
 			duration: '28s',
@@ -270,9 +281,10 @@ export const floatingAssets: FloatingAsset[] = [
 		className: 'asset-7',
 		dimensions: { width: 182, height: 195 },
 		mobileDimensions: { width: 119, height: 128 },
+		mobileDriftScale: 0.18,
 		depth: 2,
 		desktop: { bottom: '10%', right: '12%' },
-		mobile: { bottom: '10%', right: '12%' },
+		mobile: { bottom: '10%', right: '11%' },
 		interaction: { strength: 16, radius: 180 },
 		motion: {
 			duration: '23s',

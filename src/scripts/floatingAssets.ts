@@ -10,8 +10,6 @@ export const initFloatingAssets = () => {
 	let pointerActive = false;
 	let rafId = 0;
 	let enabled = false;
-	let viewportWidth = window.innerWidth;
-	let viewportHeight = window.innerHeight;
 
 	const state = assets.map((asset) => {
 		const inner = asset.querySelector<HTMLElement>('.floating-asset__inner');
@@ -21,9 +19,15 @@ export const initFloatingAssets = () => {
 			inner,
 			currentX: 0,
 			currentY: 0,
+			settledX: 0,
+			settledY: 0,
+			velocityX: 0,
+			velocityY: 0,
 			targetX: 0,
 			targetY: 0,
 			currentRotate: 0,
+			settledRotate: 0,
+			velocityRotate: 0,
 			targetRotate: 0,
 			strength: Number(asset.dataset.repelStrength ?? 20),
 			radius: Number(asset.dataset.repelRadius ?? 220)
@@ -33,9 +37,15 @@ export const initFloatingAssets = () => {
 	const resetAsset = (item: (typeof state)[number]) => {
 		item.currentX = 0;
 		item.currentY = 0;
+		item.settledX = 0;
+		item.settledY = 0;
+		item.velocityX = 0;
+		item.velocityY = 0;
 		item.targetX = 0;
 		item.targetY = 0;
 		item.currentRotate = 0;
+		item.settledRotate = 0;
+		item.velocityRotate = 0;
 		item.targetRotate = 0;
 
 		if (!item.inner) return;
@@ -46,6 +56,8 @@ export const initFloatingAssets = () => {
 	};
 
 	const applyMotion = () => {
+		let hasMotion = false;
+
 		for (const item of state) {
 			const rect = item.asset.getBoundingClientRect();
 			const centerX = rect.left + rect.width * 0.5;
@@ -58,25 +70,39 @@ export const initFloatingAssets = () => {
 			if (withinRange) {
 				const influence = 1 - distance / item.radius;
 				const eased = influence * influence;
-				const push = item.strength * eased;
-				const unclampedX = (dx / distance) * push;
-				const unclampedY = (dy / distance) * push;
-				const minX = -rect.left;
-				const maxX = viewportWidth - rect.right;
-				const minY = -rect.top;
-				const maxY = viewportHeight - rect.bottom;
-				item.targetX = Math.max(minX, Math.min(maxX, unclampedX));
-				item.targetY = Math.max(minY, Math.min(maxY, unclampedY));
-				item.targetRotate = ((dx / distance) * 3 + (dy / distance) * 1.5) * eased;
-			} else {
-				item.targetX = 0;
-				item.targetY = 0;
-				item.targetRotate = 0;
+				const push = item.strength * (0.22 + eased * 0.58);
+				item.settledX = (dx / distance) * push;
+				item.settledY = (dy / distance) * push;
+				item.settledRotate = ((dx / distance) * 1.4 + (dy / distance) * 0.75) * eased;
 			}
 
-			item.currentX += (item.targetX - item.currentX) * 0.11;
-			item.currentY += (item.targetY - item.currentY) * 0.11;
-			item.currentRotate += (item.targetRotate - item.currentRotate) * 0.09;
+			item.targetX = item.settledX;
+			item.targetY = item.settledY;
+			item.targetRotate = item.settledRotate;
+
+			// Softer spring motion with persistence so displaced assets don't snap back in place.
+			item.velocityX = item.velocityX * 0.92 + (item.targetX - item.currentX) * 0.022;
+			item.velocityY = item.velocityY * 0.92 + (item.targetY - item.currentY) * 0.022;
+			item.velocityRotate =
+				item.velocityRotate * 0.93 + (item.targetRotate - item.currentRotate) * 0.018;
+
+			item.currentX += item.velocityX;
+			item.currentY += item.velocityY;
+			item.currentRotate += item.velocityRotate;
+
+			if (
+				Math.abs(item.currentX) > 0.02 ||
+				Math.abs(item.currentY) > 0.02 ||
+				Math.abs(item.currentRotate) > 0.02 ||
+				Math.abs(item.velocityX) > 0.02 ||
+				Math.abs(item.velocityY) > 0.02 ||
+				Math.abs(item.velocityRotate) > 0.02 ||
+				Math.abs(item.targetX) > 0.02 ||
+				Math.abs(item.targetY) > 0.02 ||
+				Math.abs(item.targetRotate) > 0.02
+			) {
+				hasMotion = true;
+			}
 
 			if (!item.inner) continue;
 
@@ -85,7 +111,7 @@ export const initFloatingAssets = () => {
 			item.inner.style.setProperty('--pointer-rotate', `${item.currentRotate.toFixed(2)}deg`);
 		}
 
-		if (enabled) {
+		if (enabled && (pointerActive || hasMotion)) {
 			rafId = window.requestAnimationFrame(applyMotion);
 		} else {
 			rafId = 0;
@@ -110,13 +136,8 @@ export const initFloatingAssets = () => {
 		startLoop();
 	};
 
-	const handleResize = () => {
-		viewportWidth = window.innerWidth;
-		viewportHeight = window.innerHeight;
-	};
-
 	const syncMode = () => {
-		const shouldEnable = !mediaReducedMotion.matches;
+		const shouldEnable = mediaDesktop.matches && !mediaReducedMotion.matches;
 
 		if (shouldEnable === enabled) return;
 		enabled = shouldEnable;
@@ -137,7 +158,6 @@ export const initFloatingAssets = () => {
 	window.addEventListener('pointermove', handlePointerMove, { passive: true });
 	window.addEventListener('pointerleave', handlePointerLeave);
 	window.addEventListener('blur', handlePointerLeave);
-	window.addEventListener('resize', handleResize, { passive: true });
 	mediaDesktop.addEventListener('change', syncMode);
 	mediaReducedMotion.addEventListener('change', syncMode);
 	syncMode();

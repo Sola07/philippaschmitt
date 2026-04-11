@@ -108,7 +108,7 @@ import { floatingAssets, navLinks } from '../data/floatingAssets';
 		inset: 0;
 		pointer-events: none;
 		z-index: 1;
-		overflow: clip;
+		overflow: hidden;
 	}
 
 	.floating-asset {
@@ -168,9 +168,53 @@ import { floatingAssets, navLinks } from '../data/floatingAssets';
 		}
 	}
 
+	@keyframes drift-mobile {
+		0%,
+		100% {
+			transform: translate3d(0, 0, 0) rotate(0deg);
+		}
+
+		20% {
+			transform: translate3d(
+					calc(var(--drift-x-1, 0px) * var(--mobile-drift-scale, 0.28)),
+					calc(var(--drift-y-1, 0px) * var(--mobile-drift-scale, 0.28)),
+					0
+				)
+				rotate(calc(var(--float-tilt) * 0.34));
+		}
+
+		45% {
+			transform: translate3d(
+					calc(var(--drift-x-2, 0px) * var(--mobile-drift-scale, 0.28)),
+					calc(var(--drift-y-2, 0px) * var(--mobile-drift-scale, 0.28)),
+					0
+				)
+				rotate(calc(var(--float-tilt) * 0.62));
+		}
+
+		70% {
+			transform: translate3d(
+					calc(var(--drift-x-3, 0px) * var(--mobile-drift-scale, 0.28)),
+					calc(var(--drift-y-3, 0px) * var(--mobile-drift-scale, 0.28)),
+					0
+				)
+				rotate(calc(var(--float-tilt) * -0.24));
+		}
+
+		88% {
+			transform: translate3d(
+					calc(var(--drift-x-4, 0px) * var(--mobile-drift-scale, 0.28)),
+					calc(var(--drift-y-4, 0px) * var(--mobile-drift-scale, 0.28)),
+					0
+				)
+				rotate(calc(var(--float-tilt) * -0.3));
+		}
+	}
+
 	@media (max-width: 900px) {
 		.landing {
 			min-height: 100dvh;
+			padding: 0;
 		}
 
 		.copy {
@@ -210,6 +254,8 @@ import { floatingAssets, navLinks } from '../data/floatingAssets';
 			left: var(--mobile-left, auto);
 			width: var(--mobile-asset-width, var(--asset-width, auto));
 			height: var(--mobile-asset-height, var(--asset-height, auto));
+			animation-name: drift-mobile;
+			animation-duration: calc(var(--float-duration) * 1.08);
 		}
 	}
 
@@ -220,7 +266,7 @@ import { floatingAssets, navLinks } from '../data/floatingAssets';
 	}
 </style>
 
-<script type="module">
+<script>
 	import { initFloatingAssets } from '../scripts/floatingAssets';
 
 	initFloatingAssets();
