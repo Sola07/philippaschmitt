@@ -1,124 +1,124 @@
 ---
-import asset1 from '../assets/asset_1.svg';
-import asset2 from '../assets/asset_2.svg';
-import asset3 from '../assets/asset_3.svg';
-import asset4 from '../assets/asset_4.svg';
-import asset5 from '../assets/asset_5.svg';
-import asset6 from '../assets/asset_6.svg';
-import asset7 from '../assets/asset_7.svg';
-
-const floatingAssets = [
-	{
-		src: asset1.src,
-		alt: 'Asset decoratif 1',
-		className: 'asset-1',
-		width: 169,
-		height: 180,
-		style:
-			'--asset-width: 169px; --asset-height: 180px; --asset-top: 8%; --asset-left: 5%; --float-duration: 12s; --float-delay: -2.5s; --float-distance: 34px; --float-distance-x: 26px; --float-tilt: 3.4deg; --drift-skew: 10px; --asset-depth: 2; --repel-strength: 22; --repel-radius: 220;'
-	},
-	{
-		src: asset2.src,
-		alt: 'Asset decoratif 2',
-		className: 'asset-2',
-		width: 136,
-		height: 123,
-		style:
-			'--asset-width: 136px; --asset-height: 123px; --asset-top: 15%; --asset-right: 11%; --float-duration: 11s; --float-delay: -4s; --float-distance: 28px; --float-distance-x: 22px; --float-tilt: 2.8deg; --drift-skew: -12px; --asset-depth: 5; --repel-strength: 18; --repel-radius: 190;'
-	},
-	{
-		src: asset3.src,
-		alt: 'Asset decoratif 3',
-		className: 'asset-3',
-		width: 101,
-		height: 92,
-		style:
-			'--asset-width: 101px; --asset-height: 92px; --asset-top: 36%; --asset-left: 11%; --float-duration: 13.5s; --float-delay: -7s; --float-distance: 24px; --float-distance-x: 20px; --float-tilt: 2.2deg; --drift-skew: 8px; --asset-depth: 3; --repel-strength: 16; --repel-radius: 170;'
-	},
-	{
-		src: asset4.src,
-		alt: 'Asset decoratif 4',
-		className: 'asset-4',
-		width: 280,
-		height: 269,
-		style:
-			'--asset-width: 280px; --asset-height: 269px; --asset-top: 24%; --asset-right: 21%; --float-duration: 15s; --float-delay: -5.5s; --float-distance: 38px; --float-distance-x: 32px; --float-tilt: 3.6deg; --drift-skew: -18px; --asset-depth: 6; --repel-strength: 28; --repel-radius: 260;'
-	},
-	{
-		src: asset5.src,
-		alt: 'Asset decoratif 5',
-		className: 'asset-5',
-		width: 160,
-		height: 111,
-		style:
-			'--asset-width: 160px; --asset-height: 111px; --asset-right: 8%; --asset-bottom: 23%; --float-duration: 12.5s; --float-delay: -3.25s; --float-distance: 26px; --float-distance-x: 24px; --float-tilt: 2.8deg; --drift-skew: 14px; --asset-depth: 4; --repel-strength: 18; --repel-radius: 210;'
-	},
-	{
-		src: asset6.src,
-		alt: 'Asset decoratif 6',
-		className: 'asset-6',
-		width: 313,
-		height: 455,
-		style:
-			'--asset-width: 313px; --asset-height: 455px; --asset-left: 18%; --asset-bottom: 8%; --float-duration: 17s; --float-delay: -6s; --float-distance: 42px; --float-distance-x: 36px; --float-tilt: 3.2deg; --drift-skew: -22px; --asset-depth: 1; --repel-strength: 30; --repel-radius: 290;'
-	},
-	{
-		src: asset7.src,
-		alt: 'Asset decoratif 7',
-		className: 'asset-7',
-		width: 182,
-		height: 195,
-		style:
-			'--asset-width: 182px; --asset-height: 195px; --asset-right: 34%; --asset-bottom: 6%; --float-duration: 13s; --float-delay: -8.5s; --float-distance: 30px; --float-distance-x: 28px; --float-tilt: 2.8deg; --drift-skew: 16px; --asset-depth: 7; --repel-strength: 22; --repel-radius: 220;'
-	}
-];
+import { floatingAssets, navLinks } from '../data/floatingAssets';
 ---
 
-<div id="container">
+<section class="landing">
+	<div class="copy">
+		<h1>Philippa Schmitt</h1>
+		<nav aria-label="Main navigation">
+			<ul>
+				{
+					navLinks.map((link) => (
+						<li>
+							<a
+								href={link.href}
+								target={link.href.startsWith('http') ? '_blank' : undefined}
+								rel={link.href.startsWith('http') ? 'noreferrer' : undefined}
+							>
+								{link.label}
+							</a>
+						</li>
+					))
+				}
+			</ul>
+		</nav>
+	</div>
+
 	<div class="floating-assets" aria-hidden="true">
 		{
 			floatingAssets.map((asset) => (
 				<div
 					class={`floating-asset ${asset.className}`}
 					style={asset.style}
-					data-repel-strength={asset.style.match(/--repel-strength: ([\d.]+)/)?.[1]}
-					data-repel-radius={asset.style.match(/--repel-radius: ([\d.]+)/)?.[1]}
+					data-repel-strength={asset.dataAttributes.strength}
+					data-repel-radius={asset.dataAttributes.radius}
 				>
 					<div class="floating-asset__inner">
-						<img src={asset.src} alt={asset.alt} width={asset.width} height={asset.height} />
+						<img
+							src={asset.src}
+							alt={asset.alt}
+							width={asset.dimensions.width}
+							height={asset.dimensions.height}
+						/>
 					</div>
 				</div>
 			))
 		}
 	</div>
-</div>
+</section>
 
 <style>
-	#container {
+	:root {
+		font-family: Arial, Helvetica, sans-serif;
+	}
+
+	.landing {
 		position: relative;
-		width: 100%;
 		min-height: 100vh;
 		background: #fff;
 		overflow: hidden;
 		isolation: isolate;
+		padding: 34px 42px;
+	}
+
+	.copy {
+		position: relative;
+		z-index: 20;
+		display: flex;
+		flex-direction: column;
+		gap: 18px;
+		width: min(340px, 100%);
+	}
+
+	h1 {
+		margin: 0;
+		font-family: Arial, Helvetica, sans-serif;
+		font-size: 39px;
+		font-weight: 400;
+		line-height: 1.08;
+		color: #111;
+	}
+
+	nav ul {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		display: flex;
+		flex-direction: column;
+		gap: 14px;
+	}
+
+	nav a {
+		font-family: Arial, Helvetica, sans-serif;
+		font-size: 18px;
+		font-weight: 400;
+		line-height: 1.25;
+		color: #222;
+		text-decoration: none;
+	}
+
+	nav a:hover,
+	nav a:focus-visible {
+		text-decoration: underline;
+		text-underline-offset: 3px;
 	}
 
 	.floating-assets {
 		position: absolute;
 		inset: 0;
 		pointer-events: none;
-		overflow: hidden;
+		z-index: 1;
+		overflow: clip;
 	}
 
 	.floating-asset {
 		position: absolute;
-		top: var(--asset-top, auto);
-		right: var(--asset-right, auto);
-		bottom: var(--asset-bottom, auto);
-		left: var(--asset-left, auto);
-		width: var(--asset-width);
-		height: var(--asset-height);
-		opacity: 0.88;
+		top: var(--desktop-top, auto);
+		right: var(--desktop-right, auto);
+		bottom: var(--desktop-bottom, auto);
+		left: var(--desktop-left, auto);
+		width: var(--asset-width, auto);
+		height: var(--asset-height, auto);
 		z-index: var(--asset-depth, 1);
 		animation: drift var(--float-duration) ease-in-out infinite;
 		animation-delay: var(--float-delay);
@@ -139,7 +139,6 @@ const floatingAssets = [
 		width: 100%;
 		height: 100%;
 		object-fit: contain;
-		filter: drop-shadow(0 18px 36px rgba(17, 24, 39, 0.12));
 	}
 
 	@keyframes drift {
@@ -148,242 +147,81 @@ const floatingAssets = [
 			transform: translate3d(0, 0, 0) rotate(0deg);
 		}
 
-		25% {
-			transform: translate3d(
-					calc((var(--float-distance-x, 0px) * -0.75) + var(--drift-skew, 0px)),
-					calc(var(--float-distance) * -0.55),
-					0
-				)
+		20% {
+			transform: translate3d(var(--drift-x-1, 0px), var(--drift-y-1, 0px), 0)
 				rotate(calc(var(--float-tilt) * 0.55));
 		}
 
-		50% {
-			transform: translate3d(
-					calc((var(--float-distance-x, 0px) * 0.45) + (var(--drift-skew, 0px) * -0.35)),
-					calc(var(--float-distance) * -1),
-					0
-				)
+		45% {
+			transform: translate3d(var(--drift-x-2, 0px), var(--drift-y-2, 0px), 0)
 				rotate(var(--float-tilt));
 		}
 
-		75% {
-			transform: translate3d(
-					calc(var(--float-distance-x, 0px) + var(--drift-skew, 0px)),
-					calc(var(--float-distance) * -0.18),
-					0
-				)
+		70% {
+			transform: translate3d(var(--drift-x-3, 0px), var(--drift-y-3, 0px), 0)
+				rotate(calc(var(--float-tilt) * -0.35));
+		}
+
+		88% {
+			transform: translate3d(var(--drift-x-4, 0px), var(--drift-y-4, 0px), 0)
 				rotate(calc(var(--float-tilt) * -0.5));
 		}
 	}
 
 	@media (max-width: 900px) {
-		.floating-asset {
-			opacity: 0.58;
-			animation-duration: calc(var(--float-duration) * 1.4);
+		.landing {
+			min-height: 100dvh;
 		}
 
-		.floating-asset__inner {
-			transform: none;
+		.copy {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			width: min(320px, calc(100vw - 36px));
+			max-width: 320px;
+			align-items: center;
+			gap: 30px;
+			text-align: center;
 		}
 
-		.asset-1 {
-			width: 110px;
-			height: 117px;
-			top: 7%;
-			left: -2%;
+		h1 {
+			font-size: 30px;
+			line-height: 1.05;
 		}
 
+		nav ul {
+			gap: 26px;
+		}
+
+		nav a {
+			font-size: 23px;
+		}
+
+		.asset-1,
 		.asset-2 {
-			width: 96px;
-			height: 87px;
-			top: 10%;
-			right: -2%;
+			display: none;
 		}
 
-		.asset-3 {
-			width: 72px;
-			height: 66px;
-			top: 31%;
-			left: -1%;
-		}
-
-		.asset-4 {
-			width: 144px;
-			height: 138px;
-			top: 42%;
-			right: 3%;
-		}
-
-		.asset-5 {
-			width: 110px;
-			height: 76px;
-			right: -1%;
-			bottom: 29%;
-		}
-
-		.asset-6 {
-			width: 150px;
-			height: 218px;
-			left: 3%;
-			bottom: 11%;
-		}
-
-		.asset-7 {
-			width: 116px;
-			height: 124px;
-			right: 20%;
-			bottom: 8%;
+		.floating-asset {
+			top: var(--mobile-top, auto);
+			right: var(--mobile-right, auto);
+			bottom: var(--mobile-bottom, auto);
+			left: var(--mobile-left, auto);
+			width: var(--mobile-asset-width, var(--asset-width, auto));
+			height: var(--mobile-asset-height, var(--asset-height, auto));
 		}
 	}
 
 	@media (prefers-reduced-motion: reduce) {
-		.floating-asset {
-			animation: none;
-			opacity: 0.5;
-		}
-
 		.floating-asset__inner {
 			transform: none;
 		}
 	}
 </style>
 
-<script>
-	const mediaDesktop = window.matchMedia('(min-width: 901px)');
-	const mediaReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-	const assets = Array.from(document.querySelectorAll('.floating-asset'));
+<script type="module">
+	import { initFloatingAssets } from '../scripts/floatingAssets';
 
-	let pointerX = window.innerWidth * 0.5;
-	let pointerY = window.innerHeight * 0.35;
-	let pointerActive = false;
-	let rafId = 0;
-	let enabled = false;
-
-	const state = assets.map((asset) => {
-		const inner = asset.querySelector('.floating-asset__inner');
-		return {
-			asset,
-			inner,
-			currentX: 0,
-			currentY: 0,
-			targetX: 0,
-			targetY: 0,
-			currentRotate: 0,
-			targetRotate: 0,
-			strength: Number(asset.dataset.repelStrength ?? 20),
-			radius: Number(asset.dataset.repelRadius ?? 220)
-		};
-	});
-
-	const resetAsset = (item) => {
-		item.currentX = 0;
-		item.currentY = 0;
-		item.targetX = 0;
-		item.targetY = 0;
-		item.currentRotate = 0;
-		item.targetRotate = 0;
-		if (item.inner) {
-			item.inner.style.setProperty('--pointer-x', '0px');
-			item.inner.style.setProperty('--pointer-y', '0px');
-			item.inner.style.setProperty('--pointer-rotate', '0deg');
-		}
-	};
-
-	const applyMotion = () => {
-		let hasMotion = false;
-
-		for (const item of state) {
-			const rect = item.asset.getBoundingClientRect();
-			const centerX = rect.left + rect.width * 0.5;
-			const centerY = rect.top + rect.height * 0.5;
-			const dx = centerX - pointerX;
-			const dy = centerY - pointerY;
-			const distance = Math.hypot(dx, dy) || 0.0001;
-			const withinRange = pointerActive && distance < item.radius;
-
-			if (withinRange) {
-				const influence = 1 - distance / item.radius;
-				const eased = influence * influence;
-				const push = item.strength * eased;
-				item.targetX = (dx / distance) * push;
-				item.targetY = (dy / distance) * push;
-				item.targetRotate = ((dx / distance) * 3 + (dy / distance) * 1.5) * eased;
-			} else {
-				item.targetX = 0;
-				item.targetY = 0;
-				item.targetRotate = 0;
-			}
-
-			item.currentX += (item.targetX - item.currentX) * 0.11;
-			item.currentY += (item.targetY - item.currentY) * 0.11;
-			item.currentRotate += (item.targetRotate - item.currentRotate) * 0.09;
-
-			if (
-				Math.abs(item.currentX) > 0.02 ||
-				Math.abs(item.currentY) > 0.02 ||
-				Math.abs(item.currentRotate) > 0.02 ||
-				Math.abs(item.targetX) > 0.02 ||
-				Math.abs(item.targetY) > 0.02 ||
-				Math.abs(item.targetRotate) > 0.02
-			) {
-				hasMotion = true;
-			}
-
-			if (item.inner) {
-				item.inner.style.setProperty('--pointer-x', `${item.currentX.toFixed(2)}px`);
-				item.inner.style.setProperty('--pointer-y', `${item.currentY.toFixed(2)}px`);
-				item.inner.style.setProperty('--pointer-rotate', `${item.currentRotate.toFixed(2)}deg`);
-			}
-		}
-
-		if (enabled && (pointerActive || hasMotion)) {
-			rafId = window.requestAnimationFrame(applyMotion);
-		} else {
-			rafId = 0;
-		}
-	};
-
-	const startLoop = () => {
-		if (!enabled || rafId) return;
-		rafId = window.requestAnimationFrame(applyMotion);
-	};
-
-	const handlePointerMove = (event) => {
-		if (!enabled) return;
-		pointerX = event.clientX;
-		pointerY = event.clientY;
-		pointerActive = true;
-		startLoop();
-	};
-
-	const handlePointerLeave = () => {
-		pointerActive = false;
-		startLoop();
-	};
-
-	const syncMode = () => {
-		const shouldEnable = mediaDesktop.matches && !mediaReducedMotion.matches;
-
-		if (shouldEnable === enabled) return;
-		enabled = shouldEnable;
-
-		if (!enabled) {
-			if (rafId) {
-				window.cancelAnimationFrame(rafId);
-				rafId = 0;
-			}
-			pointerActive = false;
-			for (const item of state) resetAsset(item);
-			return;
-		}
-
-		startLoop();
-	};
-
-	window.addEventListener("pointermove", handlePointerMove, { passive: true });
-	window.addEventListener("pointerleave", handlePointerLeave);
-	window.addEventListener("blur", handlePointerLeave);
-	mediaDesktop.addEventListener("change", syncMode);
-	mediaReducedMotion.addEventListener("change", syncMode);
-	syncMode();
+	initFloatingAssets();
 </script>
