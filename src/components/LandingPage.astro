@@ -1,8 +1,8 @@
 ---
-import { floatingAssets, navLinks } from '../data/floatingAssets';
+import { landingAssets, navLinks } from '../data/floatingAssets';
 ---
 
-<section class="landing">
+<section class="landing" data-landing-root>
 	<div class="copy">
 		<h1>Philippa Schmitt</h1>
 		<nav aria-label="Main navigation">
@@ -24,16 +24,20 @@ import { floatingAssets, navLinks } from '../data/floatingAssets';
 		</nav>
 	</div>
 
-	<div class="floating-assets" aria-hidden="true">
+	<div class="asset-scene" aria-hidden="true">
 		{
-			floatingAssets.map((asset) => (
-				<div
-					class={`floating-asset ${asset.className}`}
-					style={asset.style}
-					data-repel-strength={asset.dataAttributes.strength}
-					data-repel-radius={asset.dataAttributes.radius}
-				>
-					<div class="floating-asset__inner">
+			landingAssets.map((asset) => {
+				const mobileDimensions = asset.mobileDimensions ?? asset.dimensions;
+				return (
+					<div
+						class={`landing-asset ${asset.className}`}
+						data-width={mobileDimensions.width}
+						data-height={mobileDimensions.height}
+						data-width-desktop={asset.dimensions.width}
+						data-height-desktop={asset.dimensions.height}
+						data-hide-on-mobile={asset.hideOnMobile ? 'true' : 'false'}
+						style={`--asset-depth: ${asset.depth}; --asset-width: ${asset.dimensions.width}px; --asset-height: ${asset.dimensions.height}px; --mobile-asset-width: ${mobileDimensions.width}px; --mobile-asset-height: ${mobileDimensions.height}px;`}
+					>
 						<img
 							src={asset.src}
 							alt={asset.alt}
@@ -41,8 +45,8 @@ import { floatingAssets, navLinks } from '../data/floatingAssets';
 							height={asset.dimensions.height}
 						/>
 					</div>
-				</div>
-			))
+				);
+			})
 		}
 	</div>
 </section>
@@ -72,7 +76,6 @@ import { floatingAssets, navLinks } from '../data/floatingAssets';
 
 	h1 {
 		margin: 0;
-		font-family: Arial, Helvetica, sans-serif;
 		font-size: 39px;
 		font-weight: 400;
 		line-height: 1.08;
@@ -89,7 +92,6 @@ import { floatingAssets, navLinks } from '../data/floatingAssets';
 	}
 
 	nav a {
-		font-family: Arial, Helvetica, sans-serif;
 		font-size: 18px;
 		font-weight: 400;
 		line-height: 1.25;
@@ -103,135 +105,54 @@ import { floatingAssets, navLinks } from '../data/floatingAssets';
 		text-underline-offset: 3px;
 	}
 
-	.floating-assets {
+	.asset-scene {
 		position: absolute;
 		inset: 0;
 		pointer-events: none;
 		z-index: 1;
-		overflow: hidden;
 	}
 
-	.floating-asset {
+	.landing-asset {
 		position: absolute;
-		top: var(--desktop-top, auto);
-		right: var(--desktop-right, auto);
-		bottom: var(--desktop-bottom, auto);
-		left: var(--desktop-left, auto);
-		width: var(--asset-width, auto);
-		height: var(--asset-height, auto);
+		width: var(--asset-width);
+		height: var(--asset-height);
 		z-index: var(--asset-depth, 1);
-		animation: drift var(--float-duration) ease-in-out infinite;
-		animation-delay: var(--float-delay);
-		will-change: transform;
+		opacity: 0.98;
+		pointer-events: auto;
+		touch-action: none;
+		cursor: grab;
+		user-select: none;
 	}
 
-	.floating-asset__inner {
-		width: 100%;
-		height: 100%;
-		transform: translate3d(var(--pointer-x, 0px), var(--pointer-y, 0px), 0)
-			rotate(var(--pointer-rotate, 0deg));
-		transform-origin: center;
-		will-change: transform;
-	}
-
-	.floating-asset img {
+	.landing-asset img {
 		display: block;
 		width: 100%;
 		height: 100%;
 		object-fit: contain;
+		-webkit-user-drag: none;
+		user-select: none;
+		pointer-events: none;
 	}
 
-	@keyframes drift {
-		0%,
-		100% {
-			transform: translate3d(0, 0, 0) rotate(0deg);
-		}
-
-		20% {
-			transform: translate3d(var(--drift-x-1, 0px), var(--drift-y-1, 0px), 0)
-				rotate(calc(var(--float-tilt) * 0.55));
-		}
-
-		45% {
-			transform: translate3d(var(--drift-x-2, 0px), var(--drift-y-2, 0px), 0)
-				rotate(var(--float-tilt));
-		}
-
-		70% {
-			transform: translate3d(var(--drift-x-3, 0px), var(--drift-y-3, 0px), 0)
-				rotate(calc(var(--float-tilt) * -0.35));
-		}
-
-		88% {
-			transform: translate3d(var(--drift-x-4, 0px), var(--drift-y-4, 0px), 0)
-				rotate(calc(var(--float-tilt) * -0.5));
-		}
-	}
-
-	@keyframes drift-mobile {
-		0%,
-		100% {
-			transform: translate3d(0, 0, 0) rotate(0deg);
-		}
-
-		20% {
-			transform: translate3d(
-					calc(var(--drift-x-1, 0px) * var(--mobile-drift-scale, 0.28)),
-					calc(var(--drift-y-1, 0px) * var(--mobile-drift-scale, 0.28)),
-					0
-				)
-				rotate(calc(var(--float-tilt) * 0.34));
-		}
-
-		45% {
-			transform: translate3d(
-					calc(var(--drift-x-2, 0px) * var(--mobile-drift-scale, 0.28)),
-					calc(var(--drift-y-2, 0px) * var(--mobile-drift-scale, 0.28)),
-					0
-				)
-				rotate(calc(var(--float-tilt) * 0.62));
-		}
-
-		70% {
-			transform: translate3d(
-					calc(var(--drift-x-3, 0px) * var(--mobile-drift-scale, 0.28)),
-					calc(var(--drift-y-3, 0px) * var(--mobile-drift-scale, 0.28)),
-					0
-				)
-				rotate(calc(var(--float-tilt) * -0.24));
-		}
-
-		88% {
-			transform: translate3d(
-					calc(var(--drift-x-4, 0px) * var(--mobile-drift-scale, 0.28)),
-					calc(var(--drift-y-4, 0px) * var(--mobile-drift-scale, 0.28)),
-					0
-				)
-				rotate(calc(var(--float-tilt) * -0.3));
-		}
+	.landing-asset.is-dragging {
+		cursor: grabbing;
 	}
 
 	@media (max-width: 900px) {
 		.landing {
-			min-height: 126dvh;
-			padding: 0 0 100px;
-		}
-
-		.floating-assets {
-			inset: 0 auto auto 0;
-			width: 100%;
-			height: 120dvh;
+			min-height: 100dvh;
+			padding: 0;
 		}
 
 		.copy {
 			position: absolute;
-			top: 40%;
+			top: 50%;
 			left: 50%;
 			transform: translate(-50%, -50%);
 			width: min(320px, calc(100vw - 36px));
 			max-width: 320px;
 			align-items: center;
-			gap: 24px;
+			gap: 26px;
 			text-align: center;
 		}
 
@@ -241,54 +162,22 @@ import { floatingAssets, navLinks } from '../data/floatingAssets';
 		}
 
 		nav ul {
-			gap: 22px;
+			gap: 24px;
 		}
 
 		nav a {
 			font-size: 23px;
 		}
 
-		.asset-1,
-		.asset-2 {
-			display: none;
-		}
-
-		.floating-asset {
-			top: var(--mobile-top, auto);
-			right: var(--mobile-right, auto);
-			bottom: var(--mobile-bottom, auto);
-			left: var(--mobile-left, auto);
-			width: var(--mobile-asset-width, var(--asset-width, auto));
-			height: var(--mobile-asset-height, var(--asset-height, auto));
-			animation-name: drift-mobile;
-			animation-duration: calc(var(--float-duration) * 1.08);
-		}
-
-		.floating-asset.asset-6 {
-			position: absolute;
-			top: calc(40% + 176px);
-			right: auto;
-			bottom: auto;
-			left: 50%;
-			z-index: 1;
-			transform: translateX(-50%);
-			animation: none;
-		}
-
-		.floating-asset.asset-6 .floating-asset__inner {
-			transform: none;
-		}
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		.floating-asset__inner {
-			transform: none;
+		.landing-asset {
+			width: var(--mobile-asset-width);
+			height: var(--mobile-asset-height);
 		}
 	}
 </style>
 
 <script>
-	import { initFloatingAssets } from '../scripts/floatingAssets';
+	import { initLandingAssetLayout } from '../scripts/landingAssetLayout';
 
-	initFloatingAssets();
+	initLandingAssetLayout();
 </script>
