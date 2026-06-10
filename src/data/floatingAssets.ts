@@ -29,7 +29,7 @@ export type LandingAsset = {
 export const navLinks: NavLink[] = [
 	{
 		label: 'art',
-		href: 'https://drive.google.com/file/d/1qg2oK0UnOfwMGVXw6mzylcngTM3-DmC0/view?usp=drive_link'
+		href: 'https://drive.google.com/file/d/1mFT8Mb0CSO2xn_bYjUeyz4MmyW-dSqtT/view?usp=drivesdk'
 	},
 	{
 		label: 'graphic design',
